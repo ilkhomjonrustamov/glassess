@@ -1,0 +1,155 @@
+@keyframes animation {
+  0% {
+    right: -50px;
+  }
+  100% {
+    right: 40px;
+  }
+}
+.card {
+  width: 100%;
+  border-radius: 16px;
+  background: var(--grey);
+  display: flex;
+  flex-direction: column;
+  gap: 82px;
+  /* min-height: 490px; */
+  padding: 32px;
+  padding-bottom: 30px;
+  position: relative;
+}
+
+.card_image {
+  position: relative;
+  max-width: 510px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image {
+  object-fit: contain;
+}
+.noimage {
+  width: 187px;
+  height: 187px;
+  opacity: 0.3;
+
+  object-fit: contain;
+}
+
+.img_close {
+  opacity: 1;
+  transition: all 0.5s ease-out;
+}
+
+.img_open {
+  opacity: 0;
+  transition: all 0.5s ease-out;
+}
+
+.card:hover .img_open {
+  opacity: 1;
+}
+
+.card:hover .img_close {
+  opacity: 0;
+}
+
+.card_content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card_title {
+  color: #000;
+  font-family: var(--jost-medium);
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.card_price {
+  color: var(--Black, #020105);
+  font-family: var(--jost-regular);
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.card_content_body {
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 40px;
+  bottom: 32px;
+  gap: 11px;
+  transition: all 0.5s ease-out;
+}
+.card:hover .card_content_body {
+  opacity: 1;
+}
+.color {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  background-color: red;
+}
+.number_color {
+  color: #000;
+  font-family: var(--jost-regular);
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 1440px) {
+}
+
+@media (max-width: 1200px) {
+  .card {
+    padding: 44px 16px 16px 16px;
+    border-radius: 12px;
+    gap: 71px;
+  }
+  .card_image {
+    width: 100%;
+    height: 212px;
+  }
+  .card_content {
+    gap: 8px;
+  }
+  .card_title {
+    font-size: 18px;
+    font-style: normal;
+    line-height: normal;
+  }
+  .card_price {
+    font-size: 16px;
+    font-style: normal;
+    line-height: normal;
+  }
+  .card_content_body {
+    right: 16px;
+    bottom: 16px;
+  }
+  .color {
+    width: 14px;
+    height: 14px;
+  }
+  .number_color {
+    font-size: 16px;
+    line-height: normal;
+  }
+}

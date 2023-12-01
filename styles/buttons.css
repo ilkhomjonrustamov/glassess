@@ -1,0 +1,50 @@
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 40px;
+  font-family: var(--halvar-bold), sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 18px;
+  text-transform: uppercase;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn svg {
+  max-width: 24px;
+  width: 100%;
+  height: 24px;
+}
+
+.btn.primary {
+  background-color: var(--green);
+  border: none;
+  color: var(--white);
+}
+
+.btn.primary-two {
+  padding: 16px 48px;
+  background-color: var(--green);
+  border: none;
+  color: var(--white);
+}
+
+.btn.primary-two svg {
+  max-width: 20px;
+  width: 100%;
+  height: 20px;
+}
+
+@media (max-width: 1200px) {
+  .btn {
+    max-width: 100%;
+    width: 100%;
+    border-radius: 32px;
+  }
+}

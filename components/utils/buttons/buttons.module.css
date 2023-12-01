@@ -1,0 +1,46 @@
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.btn {
+  display: grid;
+  place-items: center;
+  color: black;
+  transition: 0.3s;
+  width: 65px;
+  height: 65px;
+  padding: 20px;
+  border-radius: 100%;
+}
+
+
+
+.btn svg,
+.arrowbtn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.white {
+  background-color: white;
+  color: #3C4BDC;
+}
+
+.blue {
+  background-color: var(--Agro-Blue, #3C4BDC);
+  color: white;
+}
+
+@media (max-width: 1440px) {
+  .buttons {
+    gap: 11px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .buttons {
+    display: none;
+  }
+}

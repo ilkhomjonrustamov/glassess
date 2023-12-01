@@ -1,0 +1,41 @@
+.success,
+.error {
+  position: fixed;
+  top: 130px;
+  right: 20px;
+  z-index: 10;
+  font-family: var(--interface-medium), sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--white);
+  padding: 16px 20px;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 0.5s;
+}
+
+.success.show,
+.error.show {
+  opacity: 1;
+  transform: translateY(0px);
+  transition: 0.5s;
+}
+
+.success {
+  background-color: var(--green);
+}
+
+.error {
+  background-color: #eb5757;
+}
+
+@media (max-width: 880px) {
+  .success,
+  .error {
+    top: 90px;
+    right: 16px;
+  }
+}

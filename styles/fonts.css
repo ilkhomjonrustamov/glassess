@@ -1,0 +1,88 @@
+/* === FONTS === */
+@font-face {
+  font-family: "Jost regular";
+  src: url("../public/fonts/jost/Jost-Regular.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Jost medium";
+  src: url("../public/fonts/jost/Jost-Medium.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Jost semibold";
+  src: url("../public/fonts/jost/Jost-SemiBold.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Jost bold";
+  src: url("../public/fonts/jost/Jost-Bold.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Interface regular";
+  src: url("../public/fonts/Interface/TTInterfaces-Regular.woff");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Interface medium";
+  src: url("../public/fonts/Interface/TTInterfaces-Medium.woff");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Interface semibold";
+  src: url("../public/fonts/Interface/TTInterfaces-SemiBold.woff");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Interface bold";
+  src: url("../public/fonts/Interface/TTInterfaces-Bold.woff");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Halvar regular";
+  src: url("../public/fonts/Halvar/HalvarBreit-Rg.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Halvar medium";
+  src: url("../public/fonts/Halvar/HalvarBreit-Md.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Halvar bold";
+  src: url("../public/fonts/Halvar/HalvarBreit-Bd.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Halvar Extrabold";
+  src: url("../public/fonts/Halvar/HalvarBreit-XBd.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter Regular";
+  src: url("../public/fonts/inter/Inter-Regular.ttf");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Firs Neu semibold";
+  src: url("../public/fonts/firsneu/TTFirsNeue-DemiBold.ttf");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Firs Neu";
+  src: url("../public/fonts/firsneu/TTFirsNeue-Regular.ttf");
+  font-display: swap;
+}
