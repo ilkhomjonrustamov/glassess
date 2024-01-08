@@ -1,21 +1,25 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import { Navigation, Autoplay } from "swiper/modules";
 import Layout from "../../components/layout";
-import { CustomHead } from "../../components/layout/head";
-import { getCategories, getSingleProduct } from "../../server/api";
-import { ICategory, IProduct } from "../../server/interfaces";
-import Buttons from "../../components/utils/buttons";
-import ProductCard from "../../components/cards/product";
-// import styles from "../../styles/product.module.css";
-import styles from "../../styles/catalog_inner.module.css";
-import Image from "next/image";
-import noimage from "../../public/media/noimage.jpg";
+import styles from "../../styles/product_inner.module.css";
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-
-import { isFound, save, update } from "../../helpers/storage";
 import { TranslationsContext } from "../../store/translations";
+import { ICategory, IProduct, IStoreObjectData } from "@/server/interfaces";
+import { CustomHead } from "@/components/layout/head";
+import { getCategories, getSingleProduct, storeOrders } from "@/server/api";
+import Buttons from "@/components/utils/buttons";
+import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import ProductCard from "@/components/cards/product";
+import noimage from "../../public/media/noimage.jpg";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { arrow_left } from "@/public/icons";
+import Link from "next/link";
+import { IMaskInput } from "react-imask";
+import { FormContext } from "@/store/form";
+import Toast from "../../components/utils/toast/index";
 
 interface PageProps extends IProduct {
   other_products: IProduct[];
@@ -31,20 +35,29 @@ export default function Page({
 }) {
   const router = useRouter();
   const [cImg, setCImg] = useState("");
-
-  const [count, setCount] = useState(1);
-  const [inCart, setInCart] = useState<boolean>(false);
-
-  useEffect(() => {
-    setCImg(product.images.length > 0 ? product.images[0].image : "");
-  }, [router]);
-
+  const [colorName, setColorName] = useState("");
+  const [color, setColor] = useState(-1);
+  const [size, setSize] = useState(-1);
+  const [buypop, setBuypop] = useState(false);
+  const { isSuccess, setIsSuccess } = useContext(FormContext);
+  const [isValid, setIsValid] = useState(false);
+  const [name, setName] = useState("");
+  const [number, setNumber] = useState("");
+  const [message, setMessage] = useState("");
+  // useEffect(() => {
+  //   setCImg(product.images.length > 0 ? product.images[0].image : "");
+  // }, [router]);
   //   useEffect(() => {
   //     setInCart(isFound(product.id).boolean);
   //     setCount(isFound(product.id).count);
   //   }, [orders, router]);
   const { t } = useContext(TranslationsContext);
-
+  const pagination = {
+    clickable: true,
+    renderBullet: function (index: number, className: string) {
+      return '<span class="' + className + '">' + "</span>";
+    },
+  };
   return (
     <>
       <CustomHead
@@ -53,78 +66,169 @@ export default function Page({
         canonical={`/product/${product.slug}`}
       />
       <Layout categories={categories}>
-        {/* <section>
+        <section>
           <div className={`box ${styles.section_inner}`}>
-            <div className={styles.product_images_wrapper}>
-              <div className={styles.images_mainimg}>
-                <Image
-                  src={cImg ? cImg : noimage}
-                  alt={product.title}
-                  width={680}
-                  height={500}
-                  className="image"
-                  priority
-                />
+            <div className={styles.swiper_part}>
+              <div className={styles.buttons}>
+                <button
+                  className={`${styles.btn} prev-productimg`}
+                  style={{ transform: "rotate(180deg)" }}
+                >
+                  {arrow_left}
+                </button>
+                <button className={`${styles.btn} next-productimg`}>
+                  {arrow_left}
+                </button>
               </div>
-              <div>
-                <Swiper slidesPerView={4} spaceBetween={16} speed={800}>
-                  {product.images.length > 0
-                    ? product.images.map((img) => {
-                        return (
-                          <SwiperSlide key={img.id}>
-                            <div
-                              className={
-                                cImg === img.image
-                                  ? `${styles.images_secondary} ${styles.active}`
-                                  : styles.images_secondary
-                              }
-                              onClick={() => setCImg(img.image)}
-                            >
-                              <Image
-                                src={img.image ? img.image : noimage}
-                                alt={product.title}
-                                className="image"
-                                width={160}
-                                height={115}
-                                priority
-                              />
-                            </div>
-                          </SwiperSlide>
-                        );
-                      })
-                    : null}
-                </Swiper>
-              </div>
+              <Swiper
+                slidesPerView={1}
+                spaceBetween={16}
+                navigation={{
+                  prevEl: ".prev-productimg",
+                  nextEl: ".next-productimg",
+                }}
+                pagination={pagination}
+                modules={[Navigation, Pagination]}
+                className={styles.swiper}
+              >
+                {product.images.length > 0 ? (
+                  product.images.map((img, id) => {
+                    return (
+                      <SwiperSlide className={styles.SwiperSlide} key={id}>
+                        <div className={styles.img_box}>
+                          <Image
+                            src={img.image ? img.image : noimage}
+                            alt={product.title}
+                            className={`${styles.img} image`}
+                            width={160}
+                            height={115}
+                            priority
+                          />
+                        </div>
+                      </SwiperSlide>
+                    );
+                  })
+                ) : (
+                  <SwiperSlide className={styles.SwiperSlide}>
+                    <div className={styles.img_box}>
+                      <Image
+                        src={noimage}
+                        alt={product.title}
+                        className={`${styles.img} image ${styles.noimg}`}
+                        width={160}
+                        height={115}
+                        priority
+                      />
+                    </div>
+                  </SwiperSlide>
+                )}
+              </Swiper>
             </div>
             <div className={styles.product_content_wrapper}>
               <div className={styles.content_body}>
-                <div>
-                  <div className={styles.top}>
+                <div className={styles.title_section}>
+                  <div className={styles.title_box_inner}>
                     <p className={styles.title}>Caledonia</p>
                     <p className={styles.price}>{product.price} sum</p>
                   </div>
-                  <button className={styles.buy_btn}>Купить</button>
+                  <button
+                    className={styles.buy_btn}
+                    onClick={() => {
+                      setBuypop(true);
+                    }}
+                  >
+                    Купить
+                  </button>
+                </div>
+                <div className={styles.sizes_box}>
+                  <p className={styles.subtitle}>Price</p>
+                  <div className={styles.sizes_inner_box}>
+                    {product.sizes.length > 0
+                      ? product.sizes.map((sizes, id) => {
+                          return (
+                            <div
+                              className={`${styles.size} ${
+                                sizes.id === size ? styles.active : null
+                              }`}
+                              key={id}
+                              onClick={() => {
+                                setSize(sizes.id);
+                              }}
+                            >
+                              {sizes.title}
+                            </div>
+                          );
+                        })
+                      : null}
+                  </div>
+                </div>
+                <div className={styles.colors_box}>
+                  <div className={styles.colors_title_box}>
+                    <p className={styles.subtitle}>Colors</p>
+                    <p className={styles.color_desc}>{colorName}</p>
+                  </div>
+                  <div className={styles.colors_inner_box}>
+                    {product.colors.length > 0
+                      ? product.colors.map((colors, id) => {
+                          return (
+                            <div
+                              className={`${styles.color_box} ${
+                                colors.id === color ? styles.active : null
+                              } `}
+                              key={id}
+                            >
+                              <div
+                                className={`${styles.color} `}
+                                style={{ background: `${colors.hex}` }}
+                                onClick={() => {
+                                  setColorName(colors.title);
+                                  setColor(colors.id);
+                                }}
+                              ></div>
+                            </div>
+                          );
+                        })
+                      : null}
+                  </div>
                 </div>
               </div>
-              {product.details ? (
+              <div className={styles.desc_title_box}>
+                <p className={styles.subtitle}>Описания</p>
+              </div>
+              {product.desc ? (
                 <div
                   className={styles.content_table}
-                  dangerouslySetInnerHTML={{ __html: product.details }}
+                  dangerouslySetInnerHTML={{ __html: product.desc }}
                 ></div>
               ) : null}
+              {product.includes ? (
+                <div className={styles.includes}>
+                  <p className={styles.includes_title}>Включает в себя:</p>{" "}
+                  <div
+                    className={styles.content_table}
+                    dangerouslySetInnerHTML={{ __html: product.includes }}
+                  ></div>
+                </div>
+              ) : null}
+              <button
+                className={`${styles.buy_btn_mb} `}
+                onClick={() => {
+                  setBuypop(true);
+                }}
+              >
+                Купить
+              </button>
             </div>
           </div>
-        </section> */}
-        {/* {product.other_products.length > 0 ? (
-          <section className="section">
+        </section>
+        {product.other_products.length > 0 ? (
+          <section className={`section ${styles.other_products}`}>
             <div className="box section_inner">
-              <div className="section_inner_top">
-                <h3 className="section_title">{t["main.other_products"]}</h3>
-                <Buttons
-                  variant="blue"
-                  prevClass="prev-product"
-                  nextClass="next-product"
-                />
+              <div className={styles.other_products_top_title_section}>
+                <h3 className="section_title">Похожие продукты</h3>
+                <Link href={"/products"} className={styles.link_other_products}>
+                  Посмотреть все
+                </Link>
               </div>
               <div>
                 <Swiper
@@ -138,22 +242,23 @@ export default function Page({
                   loop={true}
                   breakpoints={{
                     0: {
-                      spaceBetween: 16,
+                      spaceBetween: 9,
                       slidesPerView: 1,
                     },
                     580: {
-                      spaceBetween: 16,
-                      slidesPerView: 2.4,
+                      spaceBetween: 9,
+                      slidesPerView: 1.4,
                     },
                     880: {
-                      spaceBetween: 16,
-                      slidesPerView: 3.4,
+                      spaceBetween: 9,
+                      slidesPerView: 2,
                     },
                     1200: {
-                      spaceBetween: 24,
-                      slidesPerView: 4.5,
+                      spaceBetween: 9,
+                      slidesPerView: 3,
                     },
                   }}
+                  className={styles.swiper_others}
                 >
                   {product.other_products.map((product) => {
                     return (
@@ -180,8 +285,109 @@ export default function Page({
               </div>
             </div>
           </section>
-        ) : null} */}
+        ) : null}
       </Layout>
+      {buypop ? (
+        <div className={styles.buy_popup}>
+          <div
+            className={styles.space}
+            onClick={() => {
+              setBuypop(false);
+            }}
+          ></div>
+          <div className={styles.buy_popup_inner}>
+            <p className={styles.buy_popup_title}>
+              Оставьте свои данные и мы вам перезвоним
+            </p>
+
+            <form
+              className={styles.form}
+              onSubmit={(e) => {
+                e.preventDefault();
+                const data: IStoreObjectData = {
+                  full_name: name,
+                  phone_number: number,
+                  email: "rilhom21@gmail.com",
+                  message: message,
+                  city: "city",
+                  product: "",
+                  size: 1,
+                  color: 1,
+                };
+                storeOrders(data)
+                  .then((res) => {
+                    setIsSuccess(true);
+                    setTimeout(() => {
+                      setIsSuccess(false);
+                      setBuypop(false);
+                      setMessage("");
+                      setName("");
+                      setNumber("");
+                      setColorName("");
+                      setColor(-1);
+                      setSize(-1);
+                    }, 2000);
+                  })
+                  .catch((e) => console.log(e));
+              }}
+            >
+              <div className={styles.form_inner}>
+                <div className={styles.form_top}>
+                  <input
+                    type="text"
+                    className={styles.input}
+                    placeholder={`Имя*`}
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                  <div className={styles.formwrapper_number}>
+                    <span
+                      className={`${number.length > 0 ? styles.black : ""}`}
+                    >
+                      +998
+                    </span>
+                    <IMaskInput
+                      className={styles.number}
+                      type="text"
+                      mask={"(00) 000 00 00"}
+                      unmask={true}
+                      placeholder=" 33 571 46 56"
+                      required
+                      value={number}
+                      onChange={(e) => setNumber(e.currentTarget.value)}
+                    />
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  className={styles.input}
+                  placeholder={`Комментарии`}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                />{" "}
+                <button
+                  type="submit"
+                  className={`${styles.submit} primary_btn `}
+                >
+                  Отправить
+                </button>
+              </div>
+              <button
+                type="submit"
+                className={`${styles.submit} ${styles.buy_btn_mb_open} primary_btn`}
+              >
+                Отправить
+              </button>
+            </form>
+          </div>
+        </div>
+      ) : null}
+      <Toast
+        variant="success"
+        toast={isSuccess ? true : false}
+        message={`Sent !`}
+      />
     </>
   );
 }

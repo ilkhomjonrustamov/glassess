@@ -271,6 +271,7 @@ main {
   border-bottom: 1px solid #020105 !important;
   margin: 0px !important;
   margin-right: 2px !important;
+  z-index: 33333;
 }
 
 .swiper-pagination-bullet-active {
