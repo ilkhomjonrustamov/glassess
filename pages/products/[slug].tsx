@@ -44,13 +44,7 @@ export default function Page({
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
   const [message, setMessage] = useState("");
-  // useEffect(() => {
-  //   setCImg(product.images.length > 0 ? product.images[0].image : "");
-  // }, [router]);
-  //   useEffect(() => {
-  //     setInCart(isFound(product.id).boolean);
-  //     setCount(isFound(product.id).count);
-  //   }, [orders, router]);
+
   const { t } = useContext(TranslationsContext);
   const pagination = {
     clickable: true,
