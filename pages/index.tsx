@@ -71,8 +71,6 @@ export default function Page({
 export async function getServerSideProps(ctx: any) {
   const categories = await getHomeCategories(ctx.locale);
   const categoriesProducts = await getCategoriesProducts(ctx.locale);
-  // const categories1 = await getSingleCategory(ctx.locale,);
-  // const Homecategories = await getHomeCategories(ctx.locale);
   const products = await getProducts(ctx.locale);
   const categoriesAll = await getCategories(ctx.locale);
   const service = await getServices(ctx.locale);

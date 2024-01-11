@@ -13,12 +13,14 @@ export default function ProductsSection({ category }: { category: ICategory }) {
       <div className="box section_inner">
         <div className="section_inner_top">
           <h3 className="section_title">{category?.title}</h3>
-          <Link href={category.slug} className="more">
-            Посмотреть все
-          </Link>
+          {category?.slug ? (
+            <Link href={category?.slug ? category.slug : "/"} className="more">
+              Посмотреть все
+            </Link>
+          ) : null}
         </div>
         <div className="products_container">
-          {category.products.length > 0
+          {category?.products.length > 0
             ? category.products.slice(0, 6).map((product) => {
                 return <ProductCard key={product.id} product={product} />;
               })
